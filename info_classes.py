@@ -7,7 +7,6 @@ class MessageType(Enum):
     Server = "Server"
 
 
-user_id_counter = 1
 
 server = None
 
@@ -21,16 +20,12 @@ class ServerInfo:
 
 class UserInfo:
     def __init__(self, userName: str, password: str, profileImage: str, isAdmin: bool):
-        global user_id_counter, server
-        user_id_counter += 1
-        self.userID = str(user_id_counter)
+        self.userID = None
         self.userName = userName
         self.password = password
         self.profileImage = profileImage
         self.isAdmin = isAdmin
 
-        if server is not None:
-            server.memberIDs.append(self.userID)
 
 
 class MessageInfo:
