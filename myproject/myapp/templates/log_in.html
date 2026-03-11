@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log In</title>
+</head>
+<body>
+    <h2>Log Into Harmony</h2>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if success %}
+        <p style="color: green;">{{ success }}</p>
+    {% endif %}
+
+    <form method="POST" action="/log_in/">
+        {% csrf_token %}
+        <label>Username:</label><br>
+        <input type="text" name="userName" required><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+
+        <button type="submit">Log In</button>
+    </form>
+    <button onclick="window.location.href='/register/'">Go to Sign Up</button>
+</body>
+</html>

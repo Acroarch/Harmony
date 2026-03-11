@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Join Us In Harmony</title>
+</head>
+<body>
+    <h2>Create an Account</h2>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if success %}
+        <p style="color: green;">{{ success }}</p>
+    {% endif %}
+
+    <form method="POST" action="/register/">
+        {% csrf_token %}
+        <label>Username:</label><br>
+        <input type="text" name="userName" required><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <label>Profile Image URL (optional):</label><br>
+        <input type="text" name="profileImage"><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+    <button onclick="window.location.href='/log_in/'">Go to Log In</button>
+</body>
+</html>
