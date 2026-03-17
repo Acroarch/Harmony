@@ -20,9 +20,11 @@ from myapp import views        # ← import from myapp, not from .
 
 urlpatterns = [
     path("", views.un_home),
+    path("server/", views.server_chat),
     path("log_out/", views.log_out),
     path("admin/", admin.site.urls),
     path("home/", views.home),
     path("log_in/", views.login_user),
     path("register/", views.register_page),
+    path("friends/", views.friends_list),
 ]

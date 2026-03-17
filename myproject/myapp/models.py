@@ -14,7 +14,11 @@ class User(models.Model):
 class Message(models.Model):
     message = models.TextField()
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
-    server = models.ForeignKey(Server, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE, null=True, blank=True)
+    server = models.ForeignKey(Server, on_delete=models.CASCADE,  null=True, blank=True)
     messageType = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class Friend(models.Model):
+    user = models.ForeignKey(User, related_name='friends', on_delete=models.CASCADE)
+    friend = models.ForeignKey(User, related_name='friend_of', on_delete=models.CASCADE)

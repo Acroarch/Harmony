@@ -1,18 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-bs-theme="dark">
 <head>
-    <title>Harmony</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony — Discord But Better</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .logo-gradient {
+            background: linear-gradient(135deg, #6ea8fe, #75b798);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
 </head>
-<body>
-
-    
-    <main>
-        <h1>Welcome to Harmony!</h1>
-        <p>Discord But Better!!</p>
-        <p>Log in or create an account</p>
-        <button onclick="window.location.href='/log_in/'">Log In</button>
-        <button onclick="window.location.href='/register/'">Sign Up</button>
+<body class="d-flex align-items-center justify-content-center min-vh-100">
+    <main class="text-center px-3" style="max-width:600px">
+        <h1 class="display-3 fw-bold mb-2 logo-gradient">Harmony</h1>
+        <p class="fs-5 text-secondary mb-1">Discord, but way better.</p>
+        <p class="text-muted mb-4">Chat with your friends in real time. Free, forever.</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="/log_in/" class="btn btn-primary btn-lg px-4">Log In</a>
+            <a href="/register/" class="btn btn-outline-secondary btn-lg px-4">Create Account</a>
+        </div>
     </main>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

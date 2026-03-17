@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Home</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <nav>
-        <a href="/home/">Home</a>
-        <a href="/log_out/">Logout</a>
-    </nav>
+{% block title %}Home — Harmony{% endblock %}
 
-    <main>
-        <h1>Welcome!</h1>
-        <button onclick="window.location.href='/server/'">Go to Server</button>
-    </main>
+{% block extra_styles %}
+    .welcome-icon { font-size: 4rem; }
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="flex-grow-1 d-flex flex-column align-items-center justify-content-center p-5 text-center">
+    <div class="welcome-icon">👋</div>
+    <h2 class="fw-bold mt-3">Welcome back!</h2>
+    <p class="text-muted mt-1">Pick a server or open a conversation from the left.</p>
+</div>
+{% endblock %}
