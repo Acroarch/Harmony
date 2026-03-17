@@ -44,7 +44,7 @@
         {% endif %}
     </div>
     <div class="p-3 bg-dark border-top border-secondary flex-shrink-0">
-        <form method="POST" action="/dm/{{ other_user.id }}/">
+        <form method="POST" action="/direct_messages/{{ other_user.id }}/">
             {% csrf_token %}
             <div class="input-group">
                 <input type="text" name="message" class="form-control" placeholder="Message {{ other_user.userName }}" required autocomplete="off">

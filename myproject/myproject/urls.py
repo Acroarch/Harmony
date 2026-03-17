@@ -20,15 +20,17 @@ from myapp import views        # ← import from myapp, not from .
 
 urlpatterns = [
     path("", views.un_home),
+    path("home/", views.home),
     path("server/", views.server_chat),
     path("log_out/", views.log_out),
     path("admin/", admin.site.urls),
-    path("home/", views.home),
     path("log_in/", views.login_user),
     path("register/", views.register_page),
     path("friends/", views.friends_list),
     path("friends/requests/", views.friend_requests),
     path("friends/request/<int:user_id>/", views.send_friend_request),
     path("friends/request/handle/<int:request_id>/<str:action>/", views.handle_friend_request),
-    path("dm/<int:user_id>/", views.dm),
+    path("direct_messages/<int:user_id>/", views.direct_messages),
+    path("profile/edit/", views.edit_profile),
 ]
+

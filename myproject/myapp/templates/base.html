@@ -124,13 +124,16 @@
             </a>
 
             <div class="section-label mt-2">Direct Messages</div>
-            <a href="/friends/" class="nav-item-link">
-                <div class="nav-icon">👥</div>
+            <!--List Friends with Direct Messages only-->
+            {% for f in friends %}
+            <a href="/direct_messages/{{ f.friend.id }}/" class="nav-item-link">
+                <div class="nav-icon">{{ f.friend.userName|slice:":1"|upper }}</div>
                 <div>
-                    <div class="fw-semibold" style="font-size:0.9rem">Friends</div>
-                    <div class="text-muted" style="font-size:0.75rem">Your friends list</div>
+                    <div class="fw-semibold" style="font-size:0.9rem">{{ f.friend.userName }}</div>
+                    <div class="text-muted" style="font-size:0.75rem">Direct Message</div>
                 </div>
             </a>
+            {% endfor %}
 
             <div class="mt-auto pt-2 border-top border-secondary">
                 <div class="d-flex align-items-center gap-2 p-2 rounded" style="background: rgba(255,255,255,0.04);">
@@ -147,8 +150,6 @@
                         <div class="text-muted" style="font-size:0.72rem;">Online</div>
                     </div>
 
-                    <a href="/settings/" class="text-muted" style="font-size:1.1rem; text-decoration:none;"
-                        title="Settings">⚙️</a>
                 </div>
 
                 <!-- pop up menu -->
@@ -167,9 +168,6 @@
                         <a href="/profile/edit/" class="user-menu-item">
                             Edit Profile
                         </a>
-                        <a href="/settings/" class="user-menu-item">
-                            Settings
-                        </a>
                         <div class="border-top border-secondary my-1"></div>
                         <a href="/log_out/" class="user-menu-item text-danger">
                             Log Out
@@ -183,6 +181,16 @@
         <main class=" main-panel flex-grow-1 d-flex flex-column">
             {% block content %}{% endblock %}
         </main>
+
+        <!-- Right sidebar (optional) only show this panel if the user isAdmin -->
+        {% if current_user.isAdmin %}
+        <aside class="sidebar bg-dark border-start border-secondary p-1 d-flex flex-column gap-0">
+            <div class="section-label mt-2">Admin Panel</div>
+            <a href="/admin/users/" class="nav-item-link">Manage Users</a>
+            <a href="/admin/servers/" class="nav-item-link">Manage Servers</a>
+            <a href="/admin/messages/" class="nav-item-link">Manage Messages</a>
+        </aside>
+        {% endif %}
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

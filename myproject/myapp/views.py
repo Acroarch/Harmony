@@ -13,19 +13,20 @@ import json
 
 
 @csrf_exempt
-def home(request):
+def home(request): #for users logged in, to see the homepage with the server chat and messages and friends list
     if request.method == "GET":
         if not request.session.get("user_id"):  # ← checks if user_id exists in session
             return redirect("/log_in/")
         current_user = User.objects.get(id=request.session["user_id"])
-        return render(request, "home.html", {"current_user": current_user})
+        friends = Friend.objects.filter(user=current_user)
+        return render(request, "home.html", {"current_user": current_user, "friends": friends})
 
 @csrf_exempt
-def un_home(request):
+def un_home(request): #for users not logged in, to see the homepage with the server chat but no messages or friends list
     if request.method == "GET":
         return render(request, "harmony.html")
 
-def log_out(request):
+def log_out(request): #logs out the user by deleting the user_id from the session and redirecting to the homepage
     if not request.session.get("user_id"):  # ← checks if user_id exists in session
         return redirect("/log_in/")
     else:
@@ -33,7 +34,7 @@ def log_out(request):
         return redirect("/")
     
 @csrf_exempt
-def login_user(request):
+def login_user(request): 
     if request.method == "POST":
         log_userName = request.POST.get("userName")
         log_password = request.POST.get("password")
@@ -49,7 +50,7 @@ def login_user(request):
     return render(request, "log_in.html")
 
 def server_chat(request):
-    if not request.session.get("user_id"):  # ← checks if user_id exists in session
+    if not request.session.get("user_id"):  # checks if user_id exists in session
             return redirect("/log_in/")
     
     current_user = User.objects.get(id=request.session["user_id"])
@@ -68,7 +69,8 @@ def server_chat(request):
             timestamp=datetime.now()
         )
         return redirect("/server/")
-    return render(request, "server.html", {"messages": messages, "current_user": current_user, "test": "HELLO"})
+    friends = Friend.objects.filter(user=current_user)
+    return render(request, "server.html", {"messages": messages, "current_user": current_user, "test": "HELLO", "friends": friends})
 
 def register_page(request):
     if request.method == "POST":
@@ -95,8 +97,9 @@ def friend_requests(request):
     if not request.session.get("user_id"):
         return redirect("/log_in/")
     current_user = User.objects.get(id=request.session["user_id"])
+    friends = Friend.objects.filter(user=current_user)
     requests = FriendRequest.objects.filter(to_user=current_user)
-    return render(request, "friend_requests.html", {"current_user": current_user, "requests": requests})
+    return render(request, "friend_requests.html", {"current_user": current_user, "requests": requests, "friends": friends})
 
 def handle_friend_request(request, request_id, action):
     if not request.session.get("user_id"):
@@ -117,7 +120,7 @@ def send_friend_request(request, user_id):
         FriendRequest.objects.get_or_create(from_user=current_user, to_user=to_user)
     return redirect("/server/")
 
-def dm(request, user_id):
+def direct_messages(request, user_id):
     if not request.session.get("user_id"):
         return redirect("/log_in/")
     current_user = User.objects.get(id=request.session["user_id"])
@@ -134,6 +137,25 @@ def dm(request, user_id):
             messageType="DM",
             timestamp=datetime.now()
         )
-        return redirect(f"/dm/{user_id}/")
+        return redirect(f"/direct_messages/{user_id}/")
 
-    return render(request, "dm.html", {"current_user": current_user, "other_user": other_user, "messages": messages})
+    friends = Friend.objects.filter(user=current_user)
+    return render(request, "direct_messages.html", {"current_user": current_user, "other_user": other_user, "messages": messages, "friends": friends})
+
+def edit_profile(request):
+    if not request.session.get("user_id"):
+        return redirect("/log_in/")
+    current_user = User.objects.get(id=request.session["user_id"])
+    friends = Friend.objects.filter(user=current_user)
+
+    if request.method == "POST":
+        new_userName = request.POST.get("userName")
+        new_password = request.POST.get("password")
+        if new_userName:
+            current_user.userName = new_userName
+        if new_password:
+            current_user.password = make_password(new_password)
+        current_user.save()
+        return redirect("/home/")
+
+    return render(request, "edit_profile.html", {"current_user": current_user, "friends": friends})
