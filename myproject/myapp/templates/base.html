@@ -1,44 +1,106 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Harmony{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        html, body { height: 100%; overflow: hidden; }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         .logo-gradient {
             background: linear-gradient(135deg, #6ea8fe, #75b798);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .sidebar { width: 240px; min-width: 240px; overflow-y: auto; }
-        .nav-item-link {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 12px; border-radius: 6px;
-            text-decoration: none; color: #adb5bd;
-            transition: background 0.15s, color 0.15s;
+
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            overflow-y: auto;
         }
-        .nav-item-link:hover, .nav-item-link.active {
-            background: rgba(255,255,255,0.07);
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #adb5bd;
+            transition: background-color 0.15s, color 0.15s;
+        }
+
+        .nav-item-link:hover,
+        .nav-item-link.active {
+            background: rgba(255, 255, 255, 0.07);
             color: #fff;
         }
+
         .nav-icon {
-            width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
             background: linear-gradient(135deg, #6ea8fe, #75b798);
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1rem;
         }
+
         .section-label {
-            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
-            text-transform: uppercase; color: #6c757d;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6c757d;
             padding: 12px 12px 4px;
         }
-        .main-panel { overflow-y: auto; min-height: 0; }
+
+        .main-panel {
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+
+        .user-menu-item {
+            display: block;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+
+        .user-menu-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: #fff;
+        }
+
+        .fp-btn {
+            display: block; width: 100%; text-align: left;
+            background: none; border: none; color: #fff;
+            padding: 7px 10px; border-radius: 5px;
+            font-size: 0.85rem; cursor: pointer;
+        
+        }
+        .fp-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: #fff;
+        }
+
         {% block extra_styles %}{% endblock %}
     </style>
 </head>
+
 <body style="height:100vh; display:flex; flex-direction:column;">
 
     <!-- Top navbar -->
@@ -69,16 +131,62 @@
                     <div class="text-muted" style="font-size:0.75rem">Your friends list</div>
                 </div>
             </a>
+
+            <div class="mt-auto pt-2 border-top border-secondary">
+                <div class="d-flex align-items-center gap-2 p-2 rounded" style="background: rgba(255,255,255,0.04);">
+
+                    <div class="nav-icon" style="cursor:pointer; flex-shrink:0;" onclick="toggleUserMenu()">
+                        {{ current_user.userName|slice:":1"|upper }}
+                    </div>
+
+                    <div class="flex-grow-1" style="min-width:0;">
+                        <div class="fw-semibold text-white"
+                            style="font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                            {{ current_user.userName }}
+                        </div>
+                        <div class="text-muted" style="font-size:0.72rem;">Online</div>
+                    </div>
+
+                    <a href="/settings/" class="text-muted" style="font-size:1.1rem; text-decoration:none;"
+                        title="Settings">⚙️</a>
+                </div>
+
+                <!-- pop up menu -->
+                <div id="user-menu" style="display:none; position:absolute; bottom:70px; left:12px; width:216px;
+                background:#1e2124; border:1px solid rgba(255,255,255,0.1); border-radius:8px;
+                box-shadow:0 -4px 20px rgba(0,0,0,0.5); z-index:9999; overflow:hidden;">
+
+                    <div class="px-3 py-2 border-bottom border-secondary">
+                        <div class="fw-bold text-white">@{{ current_user.userName }}</div>
+                    </div>
+
+                    <div class="p-1">
+                        <a href="/friends/requests/" class="user-menu-item">
+                            Friend Requests
+                        </a>
+                        <a href="/profile/edit/" class="user-menu-item">
+                            Edit Profile
+                        </a>
+                        <a href="/settings/" class="user-menu-item">
+                            Settings
+                        </a>
+                        <div class="border-top border-secondary my-1"></div>
+                        <a href="/log_out/" class="user-menu-item text-danger">
+                            Log Out
+                        </a>
+                    </div>
+                </div>
+            </div>
         </aside>
 
         <!-- Right main panel -->
-        <main class="main-panel flex-grow-1 d-flex flex-column">
+        <main class=" main-panel flex-grow-1 d-flex flex-column">
             {% block content %}{% endblock %}
         </main>
 
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/friendPanel.js' %}"></script>
     <script>
         // Highlight the active sidebar link based on current path
         const path = window.location.pathname;
@@ -86,6 +194,21 @@
             if (link.getAttribute('href') === path) link.classList.add('active');
         });
     </script>
+    <script>
+function toggleUserMenu() {
+    const menu = document.getElementById('user-menu');
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+// Close when clicking outside
+document.addEventListener('click', function(e) {
+    const menu = document.getElementById('user-menu');
+    if (!menu) return;
+    if (!menu.contains(e.target) && !e.target.closest('.nav-icon')) {
+        menu.style.display = 'none';
+    }
+});
+</script>
     {% block extra_scripts %}{% endblock %}
 </body>
+
 </html>

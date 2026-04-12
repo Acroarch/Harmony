@@ -27,4 +27,8 @@ urlpatterns = [
     path("log_in/", views.login_user),
     path("register/", views.register_page),
     path("friends/", views.friends_list),
+    path("friends/requests/", views.friend_requests),
+    path("friends/request/<int:user_id>/", views.send_friend_request),
+    path("friends/request/handle/<int:request_id>/<str:action>/", views.handle_friend_request),
+    path("dm/<int:user_id>/", views.dm),
 ]

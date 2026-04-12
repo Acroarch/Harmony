@@ -1,8 +1,6 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Harmony — #general{% endblock %}
-
+{% block title %}Harmony — DM{% endblock %}
 {% block extra_styles %}
     .messages { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
     .messages::-webkit-scrollbar { width: 8px; }
@@ -14,26 +12,25 @@
         display: flex; align-items: center; justify-content: center;
         font-weight: 700; font-size: 0.9rem; color: #fff;
     }
-    .channel-name::before { content: '# '; color: #adb5bd; }
 {% endblock %}
 {% block content %}
-    <div class="px-3 py-2 border-bottom border-secondary flex-shrink-0">
-        <span class="fw-bold channel-name">general</span>
+    <div class="px-3 py-2 border-bottom border-secondary flex-shrink-0 d-flex align-items-center gap-2">
+        <div class="avatar" style="width:28px; height:28px; font-size:0.75rem;">
+            {{ other_user.userName|slice:":1"|upper }}
+        </div>
+        <span class="fw-bold text-white">{{ other_user.userName }}</span>
     </div>
-
     <div class="messages p-3 d-flex flex-column gap-1 flex-grow-1" id="msgContainer">
         {% if not messages %}
         <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1 text-muted">
             <div style="font-size:2.5rem">&#128172;</div>
-            <div class="mt-2">No messages yet. Be the first to say something!</div>
+            <div class="mt-2">Start a conversation with {{ other_user.userName }}!</div>
         </div>
         {% else %}
         {% for message in messages %}
         <div class="msg d-flex gap-2 p-2">
-            <div class="avatar mt-1" 
-                style="cursor:pointer;"
-                 onclick="showUserPanel(event, '{{ message.sender.id }}', '{{ message.sender.userName }}')">
-                {{ message.sender.userName|first|upper }}
+            <div class="avatar mt-1">
+                {{ message.sender.userName|slice:":1"|upper }}
             </div>
             <div>
                 <div class="d-flex align-items-baseline gap-2">
@@ -46,20 +43,17 @@
         {% endfor %}
         {% endif %}
     </div>
-
     <div class="p-3 bg-dark border-top border-secondary flex-shrink-0">
-        <form method="POST" action="/server/">
+        <form method="POST" action="/dm/{{ other_user.id }}/">
             {% csrf_token %}
             <div class="input-group">
-                <input type="text" name="message" class="form-control" placeholder="Message #general" required autocomplete="off">
+                <input type="text" name="message" class="form-control" placeholder="Message {{ other_user.userName }}" required autocomplete="off">
                 <button type="submit" class="btn btn-primary">Send</button>
             </div>
         </form>
     </div>
 {% endblock %}
-
 {% block extra_scripts %}
-<script src="{% static 'js/friendPanel.js' %}"></script>
 <script>
     const c = document.getElementById('msgContainer');
     if (c) c.scrollTop = c.scrollHeight;
