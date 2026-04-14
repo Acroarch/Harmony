@@ -12,10 +12,6 @@
             <input type="text" class="form-control" id="userName" name="userName" value="{{ current_user.userName }}" required>
         </div>
         <div class="mb-3">
-            <label for="email" class="form-label text-white">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ current_user.email }}" required>
-        </div>
-        <div class="mb-3">
             <label for="password" class="form-label text-white">New Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current password">
         </div>
@@ -23,16 +19,16 @@
                 <label for="confirm_password" class="form-label text-white">Confirm New Password</label>
                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm new password">
         </div>
-        <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin" {% if current_user.isAdmin %}checked{% endif %}>
-                <label class="form-check-label text-white" for="isAdmin">Admin Privileges</label>
-        </div>
         <div class="mb-3">
             <label for="isAdmin" class="form-label text-white">Admin Privileges</label>
             <select class="form-select" id="isAdmin" name="isAdmin">
                 <option value="True" {% if current_user.isAdmin %}selected{% endif %}>Yes</option>
                 <option value="False" {% if not current_user.isAdmin %}selected{% endif %}>No</option>
             </select>
+        </div>
+        <div class="mb-3">
+            <label for="profilePicture" class="form-label text-white">Change Profile Image</label>
+            <input type="file" class="form-control" id="profilePicture" name="profileImage">
         </div>
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
