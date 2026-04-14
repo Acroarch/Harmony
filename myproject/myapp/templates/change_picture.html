@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Change Picture — Harmony</title>
+</head>
+<body>
+ 
+    <main>
+        <h1>Change Profile Picture</h1>
+ 
+        {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+        {% if success %}<p style="color:green;">{{ success }}</p>{% endif %}
+ 
+        <p>Current Picture:</p>
+        {% if user.profileImage %}
+            <img src="{{ user.profileImage.url }}" width="100"><br><br>
+        {% else %}
+            <p>No profile picture set</p><br>
+        {% endif %}
+ 
+        <form method="POST" action="/change_picture/" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label>Upload New Picture:</label><br>
+            <input type="file" name="profileImage" accept=".png,.jpg,.jpeg"><br><br>
+            <button type="submit">Update Picture</button>
+            <button type="submit" name="delete_image">Delete Picture</button>
+        </form>
+ 
+        <br>
+        <button onclick="window.location.href='/home/'">Home</button>
+        <button onclick="window.location.href='/edit_profile/'">Edit Profile</button>
+    </main>
+ 
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Harmony</title>
+</head>
+<body>
+
+    
+    <main>
+        <h1>Welcome to the Harmonious Server!</h1>
+        <p>Discord But Way Better!!</p>
+        <div>
+            {% for message in messages %}
+            <p><em>{{message.sender.userName}}:</em>{{message.message}}</p>
+            {% endfor %}
+        </div>
+        <form method="POST" action="/server/">
+            {% csrf_token %}
+            <label>Type your message here:</label><br>
+            <input type="text" name="message"><br><br>
+            <button type="submit">Send</button>
+        </form>
+            
+
+        <button onclick="window.location.href='/home/'">Home</button>
+        <button onclick="window.location.href='/log_out/'">Log Out</button>
+    </main>
+
+</body>
+</html>

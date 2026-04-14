@@ -16,13 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from myapp import views        # ← import from myapp, not from .
+from django.conf import settings
+from django.conf.urls.static import static
+from myapp import views        
 
 urlpatterns = [
     path("", views.un_home),
+    path("server/", views.server_chat),
     path("log_out/", views.log_out),
     path("admin/", admin.site.urls),
     path("home/", views.home),
     path("log_in/", views.login_user),
     path("register/", views.register_page),
-]
+    path("banned/", views.your_banned_lol),
+    path("edit_profile_page/", views.edit_profile_page),
+    path("change_username/", views.change_username),
+    path("change_password/", views.change_password),
+    path("change_picture/", views.change_picture),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

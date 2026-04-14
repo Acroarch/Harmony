@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Change Username — Harmony</title>
+</head>
+<body>
+ 
+    <main>
+        <h1>Change Username</h1>
+ 
+        {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+        {% if success %}<p style="color:green;">{{ success }}</p>{% endif %}
+ 
+        <form method="POST" action="/change_username/">
+            {% csrf_token %}
+            <label>New Username:</label><br>
+            <input type="text" name="userName"><br><br>
+ 
+            <button type="submit">Update Username</button>
+        </form>
+ 
+        <br>
+        <button onclick="window.location.href='/home/'">Home</button>
+        <button onclick="window.location.href='/edit_profile/'">Edit Profile</button>
+    </main>
+ 
+</body>
+</html>
+ 

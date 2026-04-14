@@ -6,13 +6,6 @@
 <body>
     <h2>Log Into Harmony</h2>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-
-    {% if success %}
-        <p style="color: green;">{{ success }}</p>
-    {% endif %}
 
     <form method="POST" action="/log_in/">
         {% csrf_token %}
