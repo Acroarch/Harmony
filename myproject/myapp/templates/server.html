@@ -30,11 +30,16 @@
         {% else %}
         {% for message in messages %}
         <div class="msg d-flex gap-2 p-2">
+            {% if message.sender.profileImage %}
+            <img src="{{ message.sender.profileImage.url }}" class="avatar mt-1" style="cursor:pointer;object-fit:cover;"
+                 onclick="showUserPanel(event, '{{ message.sender.id }}', '{{ message.sender.userName }}')">
+            {% else %}
             <div class="avatar mt-1" 
                 style="cursor:pointer;"
                  onclick="showUserPanel(event, '{{ message.sender.id }}', '{{ message.sender.userName }}')">
                 {{ message.sender.userName|first|upper }}
             </div>
+            {% endif %}
             <div>
                 <div class="d-flex align-items-baseline gap-2">
                     <span class="fw-semibold text-white">{{ message.sender.userName }}</span>

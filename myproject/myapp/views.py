@@ -151,10 +151,16 @@ def edit_profile(request):
     if request.method == "POST":
         new_userName = request.POST.get("userName")
         new_password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
         if new_userName:
             current_user.userName = new_userName
         if new_password:
-            current_user.password = make_password(new_password)
+            if new_password == confirm_password:
+                current_user.password = make_password(new_password)
+            else:
+                return render(request, "edit_profile.html", {"current_user": current_user, "friends": friends, "error": "Passwords do not match"})
+        if request.FILES.get("profileImage"):
+            current_user.profileImage = request.FILES["profileImage"]
         current_user.save()
         return redirect("/home/")
 

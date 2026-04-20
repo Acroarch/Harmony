@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from myapp import views        # ← import from myapp, not from .
 
 urlpatterns = [
@@ -32,5 +34,5 @@ urlpatterns = [
     path("friends/request/handle/<int:request_id>/<str:action>/", views.handle_friend_request),
     path("direct_messages/<int:user_id>/", views.direct_messages),
     path("profile/edit/", views.edit_profile),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

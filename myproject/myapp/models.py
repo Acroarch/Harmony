@@ -8,7 +8,7 @@ class User(models.Model):
     id =  models.AutoField(primary_key=True)
     userName = models.CharField(max_length=100)
     password = models.CharField(max_length=255)
-    profileImage = models.CharField(max_length=255)
+    profileImage = models.ImageField(upload_to='profile_images/', blank=True, null=True)
     isAdmin = models.BooleanField(default=False)
 
 class Message(models.Model):

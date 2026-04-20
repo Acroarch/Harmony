@@ -5,7 +5,7 @@
 {% block content %}
 <div class="p-4">
     <h5 class="text-white mb-4">Edit Profile</h5>
-    <form method="POST" action="/profile/edit/">
+    <form method="POST" action="/profile/edit/" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="userName" class="form-label text-white">Username</label>
@@ -28,8 +28,17 @@
         </div>
         <div class="mb-3">
             <label for="profilePicture" class="form-label text-white">Change Profile Image</label>
-            <input type="file" class="form-control" id="profilePicture" name="profileImage">
+            {% if current_user.profileImage %}
+            <div class="mb-2">
+                <img src="{{ current_user.profileImage.url }}" alt="Current avatar" style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
+            </div>
+            {% endif %}
+            <input type="file" class="form-control" id="profilePicture" name="profileImage" accept="image/*">
         </div>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
