@@ -20,13 +20,6 @@
                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm new password">
         </div>
         <div class="mb-3">
-            <label for="isAdmin" class="form-label text-white">Admin Privileges</label>
-            <select class="form-select" id="isAdmin" name="isAdmin">
-                <option value="True" {% if current_user.isAdmin %}selected{% endif %}>Yes</option>
-                <option value="False" {% if not current_user.isAdmin %}selected{% endif %}>No</option>
-            </select>
-        </div>
-        <div class="mb-3">
             <label for="profilePicture" class="form-label text-white">Change Profile Image</label>
             {% if current_user.profileImage %}
             <div class="mb-2">

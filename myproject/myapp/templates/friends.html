@@ -14,7 +14,13 @@
     {% else %}
         {% for f in friends %}
         <div class="d-flex align-items-center gap-3 p-3 mb-2 rounded" style="background:rgba(255,255,255,0.04)">
-            <div class="nav-icon">{{ f.friend.userName|slice:":1"|upper }}</div>
+            {% if f.friend.profileImage %}
+            <img src="{{ f.friend.profileImage.url }}" class="avatar mt-1">
+            {% else %}
+            <div class="avatar mt-1">
+                {{ f.friend.userName|slice:":1"|upper }}
+            </div>
+            {% endif %}
             <div class="flex-grow-1 text-white fw-semibold">{{ f.friend.userName }}</div>
             <a href="/direct_messages/{{ f.friend.id }}/" class="btn btn-sm btn-outline-light">Message</a>
         </div>

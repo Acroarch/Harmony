@@ -14,13 +14,6 @@
             overflow: hidden;
         }
 
-        .logo-gradient {
-            background: linear-gradient(135deg, #6ea8fe, #75b798);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
         .sidebar {
             width: 240px;
             min-width: 240px;
@@ -49,7 +42,7 @@
             height: 36px;
             border-radius: 50%;
             flex-shrink: 0;
-            background: linear-gradient(135deg, #6ea8fe, #75b798);
+            background: #444;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -97,69 +90,129 @@
             color: #fff;
         }
 
-        {% block extra_styles %}{% endblock %}
+        /* Shared message panel styles */
+        .messages { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
+        .messages::-webkit-scrollbar { width: 8px; }
+        .messages::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        .msg:hover { background: rgba(255,255,255,0.04); border-radius: 6px; }
+        .avatar {
+            width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+            background: #444;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem; color: #fff;
+        }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+        /* Sidebar text sizes */
+        .sidebar-title { font-size: 0.9rem; }
+        .sidebar-subtitle { font-size: 0.75rem; }
+
+        /* Username display */
+        .username-display {
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* User footer row */
+        .user-footer-row { background: rgba(255,255,255,0.04); }
+
+        /* User menu popup */
+        #user-menu {
+            display: none;
+            position: absolute;
+            bottom: 70px;
+            left: 12px;
+            width: 216px;
+            background: #1e2124;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .nav-icon-btn { cursor: pointer; flex-shrink: 0; }
+        .flex-min-0 { min-width: 0; min-height: 0; }
+        .word-break { word-break: break-word; }
+        .ts-small { font-size: 0.72rem; }
+        .channel-name::before { content: '# '; color: #adb5bd; }
+
+
     </style>
 </head>
 
-<body style="height:100vh; display:flex; flex-direction:column;">
+<body class="flex-column" style="height:100vh; display:flex;">
 
-    <!-- Top navbar -->
+    <!-- Top nav -->
     <nav class="navbar navbar-dark bg-dark border-bottom border-secondary px-4 flex-shrink-0">
-        <span class="navbar-brand fw-bold logo-gradient fs-4">Harmony</span>
+        <span class="navbar-brand fw-bold text-white fs-4">Harmony</span>
         <a href="/log_out/" class="btn btn-outline-danger btn-sm">Log Out</a>
     </nav>
 
-    <!-- Body: sidebar + main panel -->
-    <div class="d-flex flex-grow-1" style="min-height:0">
+    <!-- sidebar + main panel + right admin panel -->
+    <div class="d-flex flex-grow-1 flex-min-0">
 
-        <!-- Left sidebar -->
+        <!-- Left bar -->
         <aside class="sidebar bg-dark border-end border-secondary p-2 d-flex flex-column gap-1">
             <div class="section-label">Servers</div>
             <a href="/server/" class="nav-item-link">
                 <div class="nav-icon">🎵</div>
                 <div>
-                    <div class="fw-semibold" style="font-size:0.9rem">Harmony</div>
-                    <div class="text-muted" style="font-size:0.75rem">General chat</div>
+                    <div class="fw-semibold sidebar-title">Harmony Server</div>
+                    <div class="text-muted sidebar-subtitle">Main chat</div>
                 </div>
             </a>
 
-            <div class="section-label mt-2">Direct Messages</div>
-            <!--List Friends with Direct Messages only-->
-            {% for f in friends %}
-            <a href="/direct_messages/{{ f.friend.id }}/" class="nav-item-link">
-                <div class="nav-icon">{{ f.friend.userName|slice:":1"|upper }}</div>
+            <div class="section-label mt-2">Friend Requests</div>
+
+            <a href="/friends/requests/" class="nav-item-link"><!--View Friends Page-->
+                <div class="nav-icon">👥</div>
                 <div>
-                    <div class="fw-semibold" style="font-size:0.9rem">{{ f.friend.userName }}</div>
-                    <div class="text-muted" style="font-size:0.75rem">Direct Message</div>
+                    <div class="fw-semibold sidebar-title">View Requests</div>
+                </div>
+            </a>    
+
+            <div class="section-label mt-2">Direct Messages</div>
+            
+            {% for f in friends %}<!--List of Direct Messages only-->
+            <a href="/direct_messages/{{ f.friend.id }}/" class="nav-item-link">
+                {% if f.friend.profileImage %}
+                <img src="{{ f.friend.profileImage.url }}" class="avatar nav-icon">
+                {% else %}
+                <div class="avatar nav-icon">
+                    {{ f.friend.userName|slice:":1"|upper }}
+                </div>
+                {% endif %}
+                <div>
+                    <div class="fw-semibold sidebar-title">{{ f.friend.userName }}</div>
+                    <div class="text-muted sidebar-subtitle">Direct Message</div>
                 </div>
             </a>
             {% endfor %}
 
-            <div class="mt-auto pt-2 border-top border-secondary">
-                <div class="d-flex align-items-center gap-2 p-2 rounded" style="background: rgba(255,255,255,0.04);">
 
-                    <div class="nav-icon" style="cursor:pointer; flex-shrink:0;" onclick="toggleUserMenu()">
+
+            <div class="mt-auto pt-2 border-top border-secondary">
+                <div class="d-flex align-items-center gap-2 p-2 rounded user-footer-row">
+
+                    <div class="nav-icon nav-icon-btn" onclick="toggleUserMenu()">
                         {% if current_user.profileImage %}
-                        <img src="{{ current_user.profileImage.url }}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                        <img src="{{ current_user.profileImage.url }}" class="avatar-img">
                         {% else %}
                         {{ current_user.userName|slice:":1"|upper }}
                         {% endif %}
                     </div>
 
-                    <div class="flex-grow-1" style="min-width:0;">
-                        <div class="fw-semibold text-white"
-                            style="font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                            {{ current_user.userName }}
-                        </div>
-                        <div class="text-muted" style="font-size:0.72rem;">Online</div>
+                    <div class="flex-grow-1 flex-min-0">
+                        <div class="fw-semibold text-white username-display">{{ current_user.userName }}</div>
+                        <div class="text-muted ts-small">Online</div>
                     </div>
 
                 </div>
 
-                <!-- pop up menu -->
-                <div id="user-menu" style="display:none; position:absolute; bottom:70px; left:12px; width:216px;
-                background:#1e2124; border:1px solid rgba(255,255,255,0.1); border-radius:8px;
-                box-shadow:0 -4px 20px rgba(0,0,0,0.5); z-index:9999; overflow:hidden;">
+                <div id="user-menu"><!-- pop up menu -->
 
                     <div class="px-3 py-2 border-bottom border-secondary">
                         <div class="fw-bold text-white">@{{ current_user.userName }}</div>
@@ -181,18 +234,19 @@
             </div>
         </aside>
 
-        <!-- Right main panel -->
+        <!-- Main panel -->
         <main class=" main-panel flex-grow-1 d-flex flex-column">
             {% block content %}{% endblock %}
         </main>
 
-        <!-- Right sidebar (optional) only show this panel if the user isAdmin -->
+        <!-- Right sidebar only show this panel if the user isAdmin -->
         {% if current_user.isAdmin %}
         <aside class="sidebar bg-dark border-start border-secondary p-1 d-flex flex-column gap-0">
             <div class="section-label mt-2">Admin Panel</div>
-            <a href="/admin/users/" class="nav-item-link">Manage Users</a>
-            <a href="/admin/servers/" class="nav-item-link">Manage Servers</a>
-            <a href="/admin/messages/" class="nav-item-link">Manage Messages</a>
+            <a href="/admin/myapp/user/" class="nav-item-link">Manage Users</a>
+            <a href="/admin/myapp/server/" class="nav-item-link">Manage Servers</a>
+            <a href="/admin/myapp/message/" class="nav-item-link">Manage Messages</a>
+            <a href="/create_superuser/" class="nav-item-link">Create Superuser</a>
         </aside>
         {% endif %}
 
