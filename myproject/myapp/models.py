@@ -9,7 +9,8 @@ class User(models.Model):
     userName = models.CharField(max_length=100)
     password = models.CharField(max_length=255)
     profileImage = models.ImageField(upload_to='profile_images/', blank=True, null=True)
-    isAdmin = models.BooleanField(default=False)
+    isAdmin = models.BooleanField(default=False) #create_superuser function will set this to True
+    isBanned = models.BooleanField(default=False)
 
 class Message(models.Model):
     message = models.TextField()

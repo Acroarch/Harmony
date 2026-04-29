@@ -15,7 +15,7 @@
             {% if error %}<div class="alert alert-danger py-2">{{ error }}</div>{% endif %}
             {% if success %}<div class="alert alert-success py-2">{{ success }}</div>{% endif %}
 
-            <form method="POST" action="/register/">
+            <form method="POST" action="/register/" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Username</label>
@@ -26,8 +26,8 @@
                     <input type="password" name="password" class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Profile Image URL <span class="text-muted fw-normal">(optional)</span></label>
-                    <input type="text" name="profileImage" class="form-control" placeholder="https://example.com/avatar.png">
+                    <label class="form-label fw-semibold">Profile Image <span class="text-muted fw-normal">(optional)</span></label>
+                    <input type="file" name="profileImage" class="form-control" accept="image/*">
                 </div>
                 <button type="submit" class="btn btn-success w-100">Create Account</button>
             </form>

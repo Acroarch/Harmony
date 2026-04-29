@@ -34,5 +34,7 @@ urlpatterns = [
     path("friends/request/handle/<int:request_id>/<str:action>/", views.handle_friend_request),
     path("direct_messages/<int:user_id>/", views.direct_messages),
     path("profile/edit/", views.edit_profile),
+    path("banned/", views.your_banned_lol),
+    path("create_superuser/", views.create_superuser),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

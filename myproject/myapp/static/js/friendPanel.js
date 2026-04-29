@@ -14,7 +14,6 @@
       <div style="padding:8px 12px; font-size:0.8rem; font-weight:700; color:rgba(55,165,199,0.81); border-bottom:1px solid rgba(255,255,255,0.1)">@${username}</div>
       <div style="padding:6px">
         <button class="fp-btn" onclick="sendFriendRequest('${userId}')">Add Friend</button>
-        <button class="fp-btn" onclick="viewProfile('${userId}')">View Profile</button>
         <button class="fp-btn" onclick="openDM('${userId}')">Message</button>
       </div>`;
 
@@ -36,7 +35,7 @@
   };
 
   window.sendFriendRequest = (userId) => { close(); location.href = `/friends/request/${userId}/`; };
-  window.viewProfile        = (userId) => { close(); location.href = `/profile/${userId}/`; };
+  
   window.openDM             = (userId) => { close(); location.href = `/dm/${userId}/`; };
 
   document.addEventListener("click",  (e) => { if (panel && !panel.contains(e.target)) close(); });
