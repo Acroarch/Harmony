@@ -24,7 +24,9 @@
             {% else %}
             <div class="avatar mt-1" 
                 style="cursor:pointer;"
-                 onclick="showUserPanel(event, '{{ message.sender.id }}', '{{ message.sender.userName }}')">
+                {% if message.sender.id != current_user.id %}
+                onclick="showUserPanel(event, '{{ message.sender.id }}', '{{ message.sender.userName }}')"
+                {% endif %}>
                 {{ message.sender.userName|first|upper }}
             </div>
             {% endif %}
