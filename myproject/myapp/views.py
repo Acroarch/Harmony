@@ -205,6 +205,7 @@ def create_superuser(request):
             password=new_password,
             email=""
         )
+        
         return render(request, "create_superuser.html", {"success": "Superuser created! You can now log into /admin/"})
 
     return render(request, "create_superuser.html")
