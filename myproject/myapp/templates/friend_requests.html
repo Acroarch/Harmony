@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Friend Requests{% endblock %}
+{% block content %}
+<div class="p-4">
+    <h5 class="text-white mb-4">Friend Requests</h5>
+    {% if not requests %}
+        <div class="text-muted">No pending friend requests.</div>
+    {% else %}
+        {% for freq in requests %}
+        <div class="d-flex align-items-center gap-3 p-3 mb-2 rounded" style="background:rgba(255,255,255,0.04)">
+            <div class="nav-icon">{{ freq.from_user.userName|slice:":1"|upper }}</div>
+            <div class="flex-grow-1 text-white fw-semibold">{{ freq.from_user.userName }}</div>
+            <a href="/friends/request/handle/{{ freq.id }}/accept/" class="btn btn-sm btn-success">Accept</a>
+            <a href="/friends/request/handle/{{ freq.id }}/deny/" class="btn btn-sm btn-danger">Deny</a>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

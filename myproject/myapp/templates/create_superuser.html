@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Superuser{% endblock %}
+
+{% block content %}
+<div class="p-4">
+    <h5 class="text-white mb-4">Create Superuser</h5>
+    <form method="POST" action="/create_superuser/">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="userName" class="form-label text-white">Username</label>
+            <input type="text" class="form-control" id="userName" name="userName" required>
+        </div>
+        <div class="mb-3">
+            <label for="new_password" class="form-label text-white">Password</label>
+            <input type="password" class="form-control" id="new_password" name="new_password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Superuser</button>
+    </form>
+
+    {% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% endif %}
+    
+    {% if success %}
+    <div class="alert alert-success mt-3">{{ success }}</div>
+    {% endif %}
+</div>
+{% endblock %}

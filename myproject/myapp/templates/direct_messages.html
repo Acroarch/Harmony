@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Harmony — DM{% endblock %}
+
+{% block content %}
+    <div class="px-3 py-2 border-bottom border-secondary flex-shrink-0 d-flex align-items-center gap-2">
+        {% if other_user.profileImage %}
+        <img src="{{ other_user.profileImage.url }}" class="avatar avatar-img" style="width:28px;height:28px;">
+        {% else %}
+        <div class="avatar" style="width:28px; height:28px; font-size:0.75rem;"><!-- fallback initial -->
+            {{ other_user.userName|slice:":1"|upper }}
+        </div>
+        {% endif %}
+        <span class="fw-bold text-white">{{ other_user.userName }}</span>
+    </div>
+    <div class="messages p-3 d-flex flex-column gap-1 flex-grow-1" id="msgContainer">
+        {% if not messages %}
+        <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1 text-muted">
+            <div style="font-size:2.5rem">&#128172;</div>
+            <div class="mt-2">Start a conversation with {{ other_user.userName }}!</div>
+        </div>
+        {% else %}
+        {% for message in messages %}
+        <div class="msg d-flex gap-2 p-2">
+            {% if message.sender.profileImage %}
+            <img src="{{ message.sender.profileImage.url }}" class="avatar mt-1">
+            {% else %}
+            <div class="avatar mt-1">
+                {{ message.sender.userName|slice:":1"|upper }}
+            </div>
+            {% endif %}
+            <div>
+                <div class="d-flex align-items-baseline gap-2">
+                    <span class="fw-semibold text-white">{{ message.sender.userName }}</span>
+                    <span class="text-muted ts-small">{{ message.timestamp|date:"g:i A" }}</span>
+                </div>
+                <div class="text-light word-break">{{ message.message }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="p-3 bg-dark border-top border-secondary flex-shrink-0">
+        <form method="POST" action="/direct_messages/{{ other_user.id }}/">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="message" class="form-control" placeholder="Message {{ other_user.userName }}" required autocomplete="off">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+    const c = document.getElementById('msgContainer');
+    if (c) c.scrollTop = c.scrollHeight;
+</script>
+{% endblock %}

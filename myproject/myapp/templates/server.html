@@ -1,0 +1,62 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Harmony — #general{% endblock %}
+
+
+{% block content %}
+    <div class="px-3 py-2 border-bottom border-secondary flex-shrink-0">
+        <span class="fw-bold channel-name">general</span>
+    </div>
+
+    <div class="messages p-3 d-flex flex-column gap-1 flex-grow-1" id="msgContainer">
+        {% if not messages %}
+        <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1 text-muted">
+            <div style="font-size:2.5rem">&#128172;</div>
+            <div class="mt-2">No messages yet. Be the first to say something!</div>
+        </div>
+        {% else %}
+        {% for message in messages %}
+        <div class="msg d-flex gap-2 p-2">
+            {% if message.sender.profileImage %}
+            <img src="{{ message.sender.profileImage.url }}" class="avatar mt-1" style="cursor:pointer;"
+                 onclick="showUserPanel(event, '{{ message.sender.id }}', '{{ message.sender.userName }}')">
+            {% else %}
+            <div class="avatar mt-1" 
+                style="cursor:pointer;"
+                {% if message.sender.id != current_user.id %}
+                onclick="showUserPanel(event, '{{ message.sender.id }}', '{{ message.sender.userName }}')"
+                {% endif %}>
+                {{ message.sender.userName|first|upper }}
+            </div>
+            {% endif %}
+            <div>
+                <div class="d-flex align-items-baseline gap-2">
+                    <span class="fw-semibold text-white">{{ message.sender.userName }}</span>
+                    <span class="text-muted ts-small">{{ message.timestamp|date:"g:i A" }}</span>
+                </div>
+                <div class="text-light word-break">{{ message.message }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="p-3 bg-dark border-top border-secondary flex-shrink-0">
+        <form method="POST" action="/server/">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="message" class="form-control" placeholder="Message #general" required autocomplete="off">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/friendPanel.js' %}"></script>
+<script>
+    const c = document.getElementById('msgContainer');
+    if (c) c.scrollTop = c.scrollHeight;
+</script>
+{% endblock %}
